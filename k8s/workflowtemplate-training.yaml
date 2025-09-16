@@ -14,7 +14,7 @@ metadata:
     ai.sap.com/version: "4.0"
 spec:
   imagePullSecrets:
-    - name: milton-credentials # e.g., milton-credentials
+    - name: milton-credentials
   entrypoint: mypipeline
   arguments:
     parameters:
@@ -27,17 +27,17 @@ spec:
       inputs:
         artifacts:
           - name: cpidataset
-            path: /app/data/   # AI Core downloads S3 object(s) here
+            path: /app/data             # directory mount (no trailing slash)
       outputs:
         artifacts:
           - name: cpimodel
             globalName: cpimodel
             path: /app/model/model.pkl
             archive:
-              none: {}         # some runners still tar; serving handles .tgz
+              none: {}
       container:
         image: docker.io/balakalyandocker/cpilog-train:py312-v1
-        command: ["/bin/sh", "-c"]
+        command: ["/bin/sh","-c"]
         env:
           - name: TARGET_COLUMN
             value: "{{workflow.parameters.TARGET_COLUMN}}"
@@ -48,5 +48,10 @@ spec:
           - name: MODEL_PATH
             value: "/app/model/model.pkl"
         args:
-          - "python /app/src/train_cpi_pipeline.py"
-
+          - >
+            set -e;
+            echo '--- env ---'; env | sort;
+            echo '--- /app/data ---'; ls -la /app/data || true;
+            echo '--- /app/model (before) ---'; ls -la /app/model || true;
+            python /app/src/train_cpi_pipeline.py;
+            echo '--- /app/model (after) ---'; ls -la /app/model || true;
