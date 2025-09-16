@@ -27,12 +27,12 @@ spec:
     spec: |
       predictor:
         imagePullSecrets:
-          - name: <your-docker-secret>   # e.g., milton-credentials
+          - name: milton-credentials   # e.g., milton-credentials
         minReplicas: 1
         maxReplicas: 3
         containers:
         - name: kserve-container
-          image: docker.io/<your-namespace>/cpilog-serve:py312-v1
+          image: docker.io/balakalyandocker/cpilog-serve:py312-v1
           ports:
             - containerPort: 9001
               protocol: TCP
@@ -44,3 +44,4 @@ spec:
           env:
             - name: STORAGE_URI
               value: "{{inputs.artifacts.cpimodel}}"
+
