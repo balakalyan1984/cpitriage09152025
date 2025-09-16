@@ -14,7 +14,7 @@ metadata:
     ai.sap.com/version: "4.0"
 spec:
   imagePullSecrets:
-    - name: <your-docker-secret> # e.g., milton-credentials
+    - name: milton-credentials # e.g., milton-credentials
   entrypoint: mypipeline
   arguments:
     parameters:
@@ -36,7 +36,7 @@ spec:
             archive:
               none: {}         # some runners still tar; serving handles .tgz
       container:
-        image: docker.io/<your-namespace>/cpilog-train:py312-v1
+        image: docker.io/balakalyandocker/cpilog-train:py312-v1
         command: ["/bin/sh", "-c"]
         env:
           - name: TARGET_COLUMN
@@ -49,3 +49,4 @@ spec:
             value: "/app/model/model.pkl"
         args:
           - "python /app/src/train_cpi_pipeline.py"
+
