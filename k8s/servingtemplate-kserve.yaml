@@ -40,8 +40,9 @@ spec:
           args:
             - >
               set -e &&
-              uvicorn serve_cpi_kserve:app --host 0.0.0.0 --port 9001
+              uvicorn --app-dir /app/src serve_cpi_kserve:app --host 0.0.0.0 --port 9001
           env:
             - name: STORAGE_URI
               value: "{{inputs.artifacts.cpimodel}}"
+
 
